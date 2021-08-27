@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 
 	"log"
@@ -168,6 +169,12 @@ func getAllVaccineVenue(date string) (interface{}, error) {
 }
 
 func main() {
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		log.Fatal("$PORT must be set")
+	}
+
 	app := fiber.New()
 
 	app.Get("/api/v1/vaccine-venue/available", func(c *fiber.Ctx) error {
@@ -190,5 +197,5 @@ func main() {
 		return c.JSON(data)
 	})
 
-	app.Listen(":3000")
+	app.Listen(":" + port)
 }

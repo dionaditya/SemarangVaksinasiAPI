@@ -1,1 +1,1 @@
-web: vaksin-scrape
+web: bin/vaksin-scrape
