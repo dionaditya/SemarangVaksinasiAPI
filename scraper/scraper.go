@@ -162,13 +162,12 @@ func GetAllVaccineVenue(bow *browser.Browser, date string) (interface{}, error) 
 				} else {
 					vaccinePlaceData[columns[columnIndex]] = columnData.Text()
 				}
-
-				vaccinePlacesData = append(vaccinePlacesData, vaccinePlaceData)
-
 			}
-
 		})
 
+		if i > 0 {
+			vaccinePlacesData = append(vaccinePlacesData, vaccinePlaceData)
+		}
 	})
 
 	if err != nil {
