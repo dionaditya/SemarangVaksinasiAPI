@@ -60,7 +60,9 @@ func main() {
 
 		var client = &http.Client{}
 
-		botUrl := "https://api.telegram.org/bot1999669558:AAEuLCTWUaUV4AJJdSILrWI_xfAZ2OH_MK8/sendMessage?chat_id=@InfoVaksinCovidSemarang&parse_mode=Markdown&text="
+		botToken := os.Getenv("BOT_TOKEN")
+
+		botUrl := "https://api.telegram.org/bot " + botToken + "/sendMessage?chat_id=@InfoVaksinCovidSemarang&parse_mode=Markdown&text="
 
 		for batch := 0; float64(batch) <= math.Ceil(float64(len(data))/float64(2)); batch++ {
 			rawMessage := ""
