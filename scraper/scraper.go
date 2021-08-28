@@ -13,7 +13,27 @@ import (
 
 var VICTORI_URL = "http://victori.semarangkota.go.id/info?tanggal="
 
-func GetAvailableVaccineVenue(bow *browser.Browser, date string) (interface{}, error) {
+type TwoSlices struct {
+	main_slice  []int
+	other_slice []int
+}
+
+type SortByOther TwoSlices
+
+func (sbo SortByOther) Len() int {
+	return len(sbo.main_slice)
+}
+
+func (sbo SortByOther) Swap(i, j int) {
+	sbo.main_slice[i], sbo.main_slice[j] = sbo.main_slice[j], sbo.main_slice[i]
+	sbo.other_slice[i], sbo.other_slice[j] = sbo.other_slice[j], sbo.other_slice[i]
+}
+
+func (sbo SortByOther) Less(i, j int) bool {
+	return sbo.other_slice[i] < sbo.other_slice[j]
+}
+
+func GetAvailableVaccineVenue(bow *browser.Browser, date string) ([]map[string]interface{}, []string, error) {
 	var url string
 
 	if len(date) > 0 {
@@ -30,7 +50,7 @@ func GetAvailableVaccineVenue(bow *browser.Browser, date string) (interface{}, e
 		columns = append(columns, s.Text())
 	})
 
-	vaccinePlacesData := []interface{}{}
+	vaccinePlacesData := []map[string]interface{}{}
 
 	bow.Find("tr:contains('Ambil Kupon')").Each(func(dataIndex int, rowData *goquery.Selection) {
 		vaccinePlaceData := make(map[string]interface{})
@@ -54,6 +74,8 @@ func GetAvailableVaccineVenue(bow *browser.Browser, date string) (interface{}, e
 				}
 
 				vaccinePlaceData[columns[columnIndex]] = value
+			} else if columns[columnIndex] == "Aksi" {
+				vaccinePlaceData[columns[columnIndex]] = s.Children().First().Text()
 			} else {
 				vaccinePlaceData[columns[columnIndex]] = s.Text()
 			}
@@ -86,6 +108,8 @@ func GetAvailableVaccineVenue(bow *browser.Browser, date string) (interface{}, e
 
 				vaccinePlaceData[columns[columnIndex]] = value
 
+			} else if columns[columnIndex] == "Aksi" {
+				vaccinePlaceData[columns[columnIndex]] = columnData.Children().First().Text()
 			} else {
 				vaccinePlaceData[columns[columnIndex]] = columnData.Text()
 			}
@@ -99,10 +123,10 @@ func GetAvailableVaccineVenue(bow *browser.Browser, date string) (interface{}, e
 		fmt.Printf("Error: %s", err.Error())
 	}
 
-	return vaccinePlacesData, err
+	return vaccinePlacesData, columns, err
 }
 
-func GetAllVaccineVenue(bow *browser.Browser, date string) (interface{}, error) {
+func GetAllVaccineVenue(bow *browser.Browser, date string) ([]map[string]interface{}, []string, error) {
 	var url string
 
 	if len(date) > 0 {
@@ -115,7 +139,7 @@ func GetAllVaccineVenue(bow *browser.Browser, date string) (interface{}, error) 
 
 	columns := []string{}
 
-	vaccinePlacesData := []interface{}{}
+	vaccinePlacesData := []map[string]interface{}{}
 
 	bow.Find("tr:contains('Aksi')").Each(func(i int, rowData *goquery.Selection) {
 		vaccinePlaceData := make(map[string]interface{})
@@ -143,6 +167,8 @@ func GetAllVaccineVenue(bow *browser.Browser, date string) (interface{}, error) 
 
 					vaccinePlaceData[columns[columnIndex]] = value
 
+				} else if columns[columnIndex] == "Aksi" {
+					vaccinePlaceData[columns[columnIndex]] = columnData.Children().First().Text()
 				} else {
 					vaccinePlaceData[columns[columnIndex]] = columnData.Text()
 				}
@@ -158,5 +184,5 @@ func GetAllVaccineVenue(bow *browser.Browser, date string) (interface{}, error) 
 		fmt.Printf("Error: %s", err.Error())
 	}
 
-	return vaccinePlacesData, err
+	return vaccinePlacesData, columns, err
 }
