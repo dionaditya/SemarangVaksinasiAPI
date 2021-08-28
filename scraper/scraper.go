@@ -8,23 +8,7 @@ import (
 	"regexp"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/headzoo/surf/agent"
 	"github.com/headzoo/surf/browser"
-	"github.com/headzoo/surf/jar"
-)
-
-var (
-	// DefaultUserAgent is the global user agent value.
-	DefaultUserAgent = agent.Create()
-
-	// DefaultSendReferer is the global value for the AttributeSendReferer attribute.
-	DefaultSendReferer = true
-
-	// DefaultMetaRefreshHandling is the global value for the AttributeHandleRefresh attribute.
-	DefaultMetaRefreshHandling = true
-
-	// DefaultFollowRedirects is the global value for the AttributeFollowRedirects attribute.
-	DefaultFollowRedirects = true
 )
 
 var VICTORI_URL = "http://victori.semarangkota.go.id/info?tanggal="
@@ -175,21 +159,4 @@ func GetAllVaccineVenue(bow *browser.Browser, date string) (interface{}, error) 
 	}
 
 	return vaccinePlacesData, err
-}
-
-func NewBrowser() *browser.Browser {
-	bow := &browser.Browser{}
-	bow.SetUserAgent(DefaultUserAgent)
-	bow.SetState(&jar.State{})
-	bow.SetCookieJar(jar.NewMemoryCookies())
-	bow.SetBookmarksJar(jar.NewMemoryBookmarks())
-	bow.SetHistoryJar(jar.NewMemoryHistory())
-	bow.SetHeadersJar(jar.NewMemoryHeaders())
-	bow.SetAttributes(browser.AttributeMap{
-		browser.SendReferer:         DefaultSendReferer,
-		browser.MetaRefreshHandling: DefaultMetaRefreshHandling,
-		browser.FollowRedirects:     DefaultFollowRedirects,
-	})
-
-	return bow
 }

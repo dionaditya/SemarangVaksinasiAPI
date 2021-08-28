@@ -8,11 +8,12 @@ import (
 	"github.com/dionaditya/victory-scrape/scraper"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/headzoo/surf"
 )
 
 func main() {
 
-	bow := scraper.NewBrowser()
+	bow := surf.NewBrowser()
 
 	port := os.Getenv("PORT")
 
