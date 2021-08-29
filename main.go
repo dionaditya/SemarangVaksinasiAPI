@@ -79,7 +79,7 @@ func main() {
 								checkedEmoji = " \U00002714"
 							}
 
-							if column == "Aksi" && s[column] == "Kuota Telah Terpenuhi" {
+							if column == "Aksi" && (strings.Contains(s[column].(string), "Kuota Telah Terpenuhi")) {
 								checkedEmoji = " 	\U0000274c"
 							}
 
