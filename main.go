@@ -40,6 +40,16 @@ func main() {
 		return c.JSON(data)
 	})
 
+	app.Get("/api/v1/vaccine-dates", func(c *fiber.Ctx) error {
+		data, err := scraper.GetVaccinationDate(bow)
+
+		if err != nil {
+			return c.SendString("Error")
+		}
+
+		return c.JSON(data)
+	})
+
 	app.Get("/api/v1/vaccine-venue", func(c *fiber.Ctx) error {
 		data, _, err := scraper.GetAllVaccineVenue(bow, c.Query("tanggal"))
 

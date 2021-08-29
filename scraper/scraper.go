@@ -186,3 +186,25 @@ func GetAllVaccineVenue(bow *browser.Browser, date string) ([]map[string]interfa
 
 	return vaccinePlacesData, columns, err
 }
+
+func GetVaccinationDate(bow *browser.Browser) ([]string, error) {
+	err := bow.Open(VICTORI_URL)
+
+	if err != nil {
+		return nil, err
+	}
+
+	vaccinationDate := []string{}
+
+	bow.Find("select[name='tanggal']").Children().Each(func(i int, s *goquery.Selection) {
+
+		if len(s.Text()) == 0 {
+			return
+		}
+
+		vaccinationDate = append(vaccinationDate, s.Text())
+
+	})
+
+	return vaccinationDate, err
+}
