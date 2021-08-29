@@ -52,7 +52,9 @@ func main() {
 
 	app.Get("/api/v1/vaccine-venue/bot", func(c *fiber.Ctx) error {
 
-		data, columns, err := scraper.GetAllVaccineVenue(bow, c.Query("tanggal"))
+		tanggalVaksinasi := c.Query("tanggal")
+
+		data, columns, err := scraper.GetAllVaccineVenue(bow, tanggalVaksinasi)
 
 		if err != nil {
 			return c.SendString("Error")
@@ -62,10 +64,12 @@ func main() {
 
 		botToken := os.Getenv("BOT_TOKEN")
 
-		botUrl := "https://api.telegram.org/bot " + botToken + "/sendMessage?chat_id=@InfoVaksinCovidSemarang&parse_mode=Markdown&text="
+		channelAccount := os.Getenv("CHANNEL_ACCOUNT")
 
-		for batch := 0; float64(batch) <= math.Ceil(float64(len(data))/float64(2)); batch++ {
-			rawMessage := ""
+		botUrl := "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=@" + channelAccount + "&parse_mode=Markdown&text="
+
+		for batch := 0; float64(batch) < math.Ceil(float64(len(data))/float64(2)); batch++ {
+			rawMessage := "Data vaksinasi tanggal " + "*" + tanggalVaksinasi + "*" + "\n" + "\n" + ""
 
 			for i, s := range data {
 
