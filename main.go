@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"strings"
 
 	"log"
 
@@ -74,7 +75,7 @@ func main() {
 
 							checkedEmoji := ""
 
-							if column == "Aksi" && (s[column] == "Mendaftar" || s[column] == "Ambil Kupon") {
+							if column == "Aksi" && (strings.Contains(s[column].(string), "Mendaftar") || strings.Contains(s[column].(string), "Ambil Kupon")) {
 								checkedEmoji = " \U00002714"
 							}
 

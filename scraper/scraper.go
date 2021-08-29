@@ -161,14 +161,20 @@ func GetAllVaccineVenue(bow *browser.Browser, date string) ([]map[string]interfa
 					value, err := strconv.Atoi(processedString)
 
 					if err != nil {
-						fmt.Println("hello world")
 						vaccinePlaceData[columns[columnIndex]] = columnData.Text()
 					}
 
 					vaccinePlaceData[columns[columnIndex]] = value
 
 				} else if columns[columnIndex] == "Aksi" {
-					vaccinePlaceData[columns[columnIndex]] = columnData.Children().First().Text()
+
+					registerLink := ""
+
+					if columnData.Children().First().Text() == "Mendaftar" || columnData.Children().First().Text() == "Ambil Kupon" {
+						registerLink = columnData.Children().First().AttrOr("href", "")
+					}
+
+					vaccinePlaceData[columns[columnIndex]] = columnData.Children().First().Text() + " " + registerLink
 				} else {
 					vaccinePlaceData[columns[columnIndex]] = columnData.Text()
 				}
