@@ -102,7 +102,6 @@ func GetAvailableVaccineVenue(bow *browser.Browser, date string) ([]map[string]i
 				value, err := strconv.Atoi(processedString)
 
 				if err != nil {
-					fmt.Println("hello world")
 					vaccinePlaceData[columns[columnIndex]] = columnData.Text()
 				}
 
@@ -141,10 +140,13 @@ func GetAllVaccineVenue(bow *browser.Browser, date string) ([]map[string]interfa
 
 	vaccinePlacesData := []map[string]interface{}{}
 
-	bow.Find("tr:contains('Aksi')").Each(func(i int, rowData *goquery.Selection) {
+	bow.Find("tr").Each(func(i int, rowData *goquery.Selection) {
 		vaccinePlaceData := make(map[string]interface{})
 
+		fmt.Println(i)
+
 		rowData.Children().Each(func(columnIndex int, columnData *goquery.Selection) {
+
 			if i == 0 {
 				columns = append(columns, columnData.Text())
 			} else {
